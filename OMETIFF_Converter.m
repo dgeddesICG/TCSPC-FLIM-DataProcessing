@@ -18,25 +18,28 @@ clear all;
 [status, version] = bfCheckJavaPath();
 
 datafile = 'h5-FAD';
-data_dir = [cd '/' datafile '_DataFiles/' ];
-
 
 file_dir = ['C:\Users\Daniel Geddes\OneDrive - University of Glasgow\UCL' '\' datafile '_DataFiles\'];
 
-hist_data = readmatrix([data_dir datafile '_' 'AlignedHistogram_Data.txt'], 'OutputType', 'int32');
+hist_data = readmatrix([file_dir datafile '_' 'AlignedHistogram_Data.txt'], 'OutputType', 'int32');
 
 
 
-dataset_info = load([data_dir datafile '_' 'InfoFile.txt']);
+dataset_info = load([file_dir datafile '_' 'InfoFile.txt']);
 
 Image_Width = dataset_info(1); %image width
 Image_Height = dataset_info(2); % image height
 Num_of_Bins = dataset_info(3); %number of time bins
 Time_Per_Bin = dataset_info(4); %Time per bin (ps)
 
-% Adjust Resolution for Binned data 
-Image_Width = floor(Image_Width/ 2);
-Image_Height = floor(Image_Height / 2);
+% Adjust Resolution for Binned data
+%Bin factor of n refers to summing n X n pixels into a single pixel
+BinFactor = 1;
+
+if BinFactor > 1
+    Image_Width = floor(Image_Width / BinFactor);
+    Image_Height = floor(Image_Height / BinFactor);
+end
 
 data = reshape(hist_data', [Image_Width, Image_Height, Num_of_Bins]); %Reshapes histogram
 
@@ -122,7 +125,7 @@ writer.setMetadataRetrieve(metadata);
 [~, filename, ~] = fileparts(datafile);
 
 
-bfsave(data, [data_dir datafile '_FLIMFIT_Binned2' '.ome.tif'], 'metadata', metadata);
+bfsave(data, [file_dir datafile '_FLIMFIT' '.ome.tif'], 'metadata', metadata);
 
 
 

@@ -17,7 +17,7 @@ clear all;
 
 [status, version] = bfCheckJavaPath();
 
-datafile = 'h5-FAD';
+datafile = 'Lung 7 5s';
 
 file_dir = ['C:\Users\Daniel Geddes\OneDrive - University of Glasgow\UCL' '\' datafile '_DataFiles\'];
 
@@ -41,7 +41,7 @@ if BinFactor > 1
     Image_Height = floor(Image_Height / BinFactor);
 end
 
-data = reshape(hist_data', [Image_Width, Image_Height, Num_of_Bins]); %Reshapes histogram
+data = flip(reshape(hist_data', [Image_Width Image_Height Num_of_Bins]), 1); %Reshapes histogram
 
 
 %% Create Metadata
@@ -125,7 +125,7 @@ writer.setMetadataRetrieve(metadata);
 [~, filename, ~] = fileparts(datafile);
 
 
-bfsave(data, [file_dir datafile '_FLIMFIT' '.ome.tif'], 'metadata', metadata);
+bfsave(data, [file_dir datafile '_FLIMAligned' '.ome.tif'], 'metadata', metadata);
 
 
 

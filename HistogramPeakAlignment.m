@@ -9,7 +9,7 @@
 clear all;
 %% Open histogram data file and reshape
 
-datafile = 'h5-D';
+datafile = 'Lung 7 5s';
 file_dir = 'C:\Users\Daniel Geddes\OneDrive - University of Glasgow\UCL';
 data_dir = [file_dir '\' datafile '_DataFiles' '\'];
 
@@ -22,7 +22,7 @@ Image_Height = dataset_info(2); % image height
 Num_of_Bins = dataset_info(3); %number of time bins
 Time_Per_Bin = dataset_info(4); %Time per bin (ps)
 
-hist_data = reshape(hist_data', [Image_Width, Image_Height, Num_of_Bins]); %Reshapes histogram
+hist_data = flip(reshape(hist_data', [Image_Width Image_Height Num_of_Bins]), 1); %Reshapes histogram
 
 
 %% Align Peaks

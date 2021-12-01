@@ -11,7 +11,7 @@ clear all;
 %% Set up directories
 
 file_dir = 'C:\Users\Daniel Geddes\OneDrive - University of Glasgow\UCL';
-datafile = 'h5-D.h5';
+datafile = 'Lung 7 5s.h5';
 data_dir = [file_dir '\' datafile];
 
 %Sets up new folder which will contain data extracted from the H5
@@ -52,9 +52,11 @@ Snapshot_data = h5read(data_dir, '/FLIM/Snapshot'); %Not sure what this represen
 Sum_data = h5read(data_dir, '/FLIM/Sum'); %Sum of all histograms
 
 %Reshape data files in to appropriate format
-FWHM_data = reshape(FWHM_data', [Image_Width Image_Height]);
-Lifetime_data = reshape(Lifetime_data', [Image_Width Image_Height]);
-Intensity_data = reshape(Intensity_data', [Image_Width Image_Height]);
+FWHM_data = flip(reshape(FWHM_data, [Image_Width Image_Height]),1);
+Lifetime_data = flip(reshape(Lifetime_data, [Image_Width Image_Height]),1);
+Intensity_data = flip(reshape(Intensity_data, [Image_Width Image_Height]),1);
+
+%Intensity_data = reshape(Intensity_data', [Image_Height Image_Width]);
 
 info_data = [Image_Width Image_Height Num_of_Bins Time_Per_Bin_ps]; %Note TimePerBin has been converted to PicoSeconds
 
@@ -68,7 +70,7 @@ writematrix(Lifetime_data, [sv_dir '\' filename '_Lifetime_Data'], 'Delimiter', 
 writematrix(Snapshot_data, [sv_dir '\' filename '_Snapshot_Data'], 'Delimiter', 'tab')
 writematrix(Sum_data, [sv_dir '\' filename '_SUM_Data'], 'Delimiter', 'tab')
 writematrix(Intensity_data, [sv_dir '\' filename '_Intensity_Data'], 'Delimiter', 'tab')
-
-%File containing properties of the data sets
+% 
+% %File containing properties of the data sets
 writematrix(info_data, [sv_dir '\' filename '_InfoFile'], 'Delimiter', 'tab')
 
